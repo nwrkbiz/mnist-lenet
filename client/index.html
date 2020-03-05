@@ -1,0 +1,228 @@
+<!--
+ HTML5 Client
+ LICENSE: "THE BEER-WARE LICENSE" (Revision 42):
+ <giri@nwrk.biz> wrote this file. As long as you retain this notice you
+ can do whatever you want with this stuff. If we meet some day, and you think
+ this stuff is worth it, you can buy me a beer in return Daniel Giritzer
+ -->
+<!doctype html>
+<html>
+  <head>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="author" content="Daniel Giritzer">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#90EE90">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <style>
+      body {
+        background-color: lightgreen;
+        overscroll-behavior-y: contain;
+      }
+    </style>
+
+    <title>MNIST LeNet</title>
+  </head>
+  <body>
+
+    <!------------ GUI Stuff ------------>
+    
+    <div id="pic_ctrl" class="border border-dark" style="background-color: lightseagreen; margin: 2%; padding: 2%;" hidden>
+      <video id="video" playsinline autoplay muted loop style="width: 100%;"></video>
+      <canvas id="canvas" height="1024" width="768" hidden style="width: 100%;"></canvas>
+
+
+      <button class="btn btn-primary btn-lg" id="snap" onclick="Snap()">Take picture</button>
+      <button class="btn btn-primary btn-lg" id="light" onclick="Light()">Enable Light</button>
+      <button class="btn btn-primary btn-lg" id="submit" onclick="Submit()" disabled>Submit</button>
+
+    </div>
+
+    <div id="result_ctrl" class="border border-dark" style="background-color: lightseagreen; margin: 2%; padding: 2%;" hidden>
+      <canvas id="resultPic" height="1024" width="768" style="width: 100%;"></canvas>
+      <label for="nums">Detected Digits:</label>
+      <input type="text" id="nums" class="form-control-lg">
+      <button class="btn btn-primary btn-lg" onclick="Read()">Read Result</button>
+      <button class="btn btn-primary btn-lg" onclick="Retry()">Retry</button>
+    </div>
+
+
+    <div id="connect_ctrl" class="border border-dark" style="background-color: lightseagreen; margin: 2%; padding: 2%;">
+      <label for="uri">Server URI:</label>
+      <input type="text" id="uri" class="form-control-lg" placeholder="ws://127.0.0.1:8809">
+      <button class="btn btn-primary btn-lg" id="connect" onclick="Connect()">Connect</button>
+    </div>
+
+    <!------------  End GUI Stuff ------------>
+    
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          }, function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        });
+      }
+
+      // Elements for taking the snapshot
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var video = document.getElementById('video');
+      var stream;
+      var toggleLight = true;
+
+      var wsc;
+
+      document.getElementById("uri").value = "ws://" + window.location.hostname + ":8809";
+
+      // Websocket callback
+      function OnAnswer(recv){
+        var answer = JSON.parse(recv.data);
+
+        if(answer.state == "Error")
+        {
+          window.alert("Error: " + answer.message);
+          return;
+        }
+        var result = answer.result;
+        var text = "Detected: ";
+        for(var i = 0; i < result.predictions.length; i++){
+            text += result.predictions[i];
+          if(i < result.predictions.length - 1)
+            text += ", ";
+        }
+
+        var canvas = document.getElementById('resultPic');
+        var ctx = canvas.getContext('2d');
+        var imageBase64 = "data:image/jpeg;base64," + result.result_picture;
+        var tmp = new Image();
+        tmp.src = imageBase64;
+        tmp.onload = function() {
+          ctx.drawImage(tmp, 0, 0, 768, 1024);
+        };
+
+        document.getElementById("nums").value = text;
+        document.getElementById("pic_ctrl").hidden = true;
+        document.getElementById("result_ctrl").hidden = false;
+      }
+
+      function OnWSCReset(){
+        document.getElementById("pic_ctrl").hidden = true;
+        document.getElementById("result_ctrl").hidden = true;
+        document.getElementById("connect_ctrl").hidden = false;
+        stream.getTracks().forEach(function(track) {
+          track.stop();
+        });
+        toggleLight = true;
+      }
+
+      function Retry(){
+        document.getElementById("pic_ctrl").hidden = false;
+        document.getElementById("result_ctrl").hidden = true;
+        document.getElementById("connect_ctrl").hidden = true;
+      }
+
+      // send data to server
+      function Submit(){
+        var tmp = canvas.toDataURL("image/jpeg", 0.65);
+        var imageBase64 = tmp.substr(tmp.indexOf(',')+1);
+        var cmd = {
+          command : "predict",
+          picture : imageBase64
+        };
+
+        wsc.send(JSON.stringify(cmd));
+      }
+
+      // Connect button clicked
+      function Connect() {
+
+        // Connect to server
+        var uri = document.getElementById("uri").value;
+        wsc = new WebSocket(uri);
+        wsc.onmessage = OnAnswer;
+        wsc.onerror = OnWSCReset;
+        wsc.onclose = OnWSCReset;
+
+        // toggle panel visibility
+        document.getElementById("connect_ctrl").hidden = true;
+        document.getElementById("pic_ctrl").hidden = false;
+
+        // back camera
+        var constraints = window.constraints = { video: {facingMode: "environment"}, audio: false };
+
+        // Get access to the camera!
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia(constraints).then(function(s) {
+                video.srcObject = s;
+                stream = s;
+                video.onloadedmetadata = function(e){
+                    video.play();
+                };
+            }).catch(function(e){alert(e)});
+          }
+      }
+
+    // Trigger photo take
+    function Snap() {
+        if(video.hidden == false)
+        {
+            context.drawImage(video, 0, 0, 768, 1024);
+            video.hidden = true;
+            canvas.hidden = false;
+            document.getElementById("snap").innerHTML = "New picture";
+            video.pause();
+            document.getElementById("submit").disabled = false;
+        }
+        else
+        {
+            video.hidden = false;
+            canvas.hidden = true;  
+            document.getElementById("snap").innerHTML = "Take picture"; 
+            video.play();
+            document.getElementById("submit").disabled = true;
+        }
+    };
+
+    // enables / disables light
+    function Light(){
+      if(toggleLight)
+      {
+          stream.getVideoTracks()[0].applyConstraints({advanced: [{torch: toggleLight}]});
+          document.getElementById("light").innerHTML = "Disable Light";
+          toggleLight = false;
+      }
+      else
+      {
+          stream.getVideoTracks()[0].applyConstraints({advanced: [{torch: toggleLight}]});
+          document.getElementById("light").innerHTML = "Enable Light"; 
+          toggleLight = true;
+      }
+    };
+
+    // Read out result text
+    function Read() {
+      if('speechSynthesis' in window){
+        var msg = new SpeechSynthesisUtterance();
+        msg.voiceURI = 'native';
+        msg.volume = 5;
+        msg.rate = 1;
+        msg.pitch = 1;
+        msg.text = document.getElementById("nums").value;
+        msg.lang = 'en-US';
+        speechSynthesis.speak(msg);
+      }
+    }
+  </script>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
