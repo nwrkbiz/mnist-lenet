@@ -1,0 +1,6 @@
+<map id="MNISTLeNet.h" name="MNISTLeNet.h">
+<area shape="rect" id="node2" href="$main_8cpp.html" title="Program entry point. " alt="" coords="5,155,80,181"/>
+<area shape="rect" id="node3" href="$WSSObserver_8h.html" title="Class to handle Websocket requests sent by a client. " alt="" coords="80,80,197,107"/>
+<area shape="rect" id="node5" href="$MNISTLeNet_8cpp.html" title="Class to train a LeNet for MNIST and to predict digits found on a jpeg picture. " alt="" coords="221,80,345,107"/>
+<area shape="rect" id="node4" href="$WSSObserver_8cpp.html" title="Class to handle Websocket requests sent by a client. " alt="" coords="104,155,235,181"/>
+</map>
