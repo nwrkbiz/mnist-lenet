@@ -1,7 +1,7 @@
 101 ICON DISCARDABLE "./Icon.ico"
 1 VERSIONINFO
-FILEVERSION     1,0,0,0
-PRODUCTVERSION  1,0,0,0
+FILEVERSION     1,0,0,2
+PRODUCTVERSION  1,0,0,2
 FILEFLAGSMASK   0X3FL
 FILEFLAGS       0L
 FILEOS          0X40004L
@@ -14,12 +14,12 @@ BEGIN
         BEGIN
 	    VALUE "CompanyName", "Daniel Giritzer"
             VALUE "FileDescription", "MNIST LeNet"
-            VALUE "FileVersion", "1.0.0.0"
+            VALUE "FileVersion", "1.0.0.2"
             VALUE "InternalName", "mnist_lenet"
             VALUE "LegalCopyright", "(c) Daniel Giritzer"
             VALUE "OriginalFilename", "mnist_lenet.windows_64.exe"
             VALUE "ProductName", "mnist_lenet"
-	    VALUE "ProductVersion", "1.0.0.0"
+	    VALUE "ProductVersion", "1.0.0.2"
         END
     END
     BLOCK "VarFileInfo"
