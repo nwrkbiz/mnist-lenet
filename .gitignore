@@ -1,0 +1,5 @@
+*.o
+mnist_lenet.*
+mnist/*-ubyte
+3rdParty
+.vscode
