@@ -55,8 +55,11 @@ public:
     /**
      * @brief Find digits on jpeg and does prediction using the trained network.
      * @param b Blob containing jpeg with handwritten digits.
-     * @returns JSON containing result. (key 'predictions': predicted digits, 
-     * key 'result_picture': base64 encoded jpeg with highlighted digits)
+     * @returns JSON containing result with following structure:
+     * {
+     * "predictions" : [{ "label" : 0, "probability" : 0.9 }],
+     * "result_picture" : "base-64-encoded-jpeg"
+     * }
      */
     giri::json::JSON predict(const giri::Blob& b);
 

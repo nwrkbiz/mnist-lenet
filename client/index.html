@@ -92,9 +92,11 @@
         var result = answer.result;
         var text = "Detected: ";
         for(var i = 0; i < result.predictions.length; i++){
-            text += result.predictions[i];
+            text += result.predictions[i].label + " (" + (result.predictions[i].probability * 100).toFixed(2) + "% sure)";
           if(i < result.predictions.length - 1)
             text += ", ";
+          else
+            text += ".";
         }
 
         var canvas = document.getElementById('resultPic');

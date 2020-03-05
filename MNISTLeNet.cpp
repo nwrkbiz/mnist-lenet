@@ -293,16 +293,25 @@ json::JSON MNISTLeNet::predict(const Blob& b){
     // ------ end opencv manipulations ------
     // --------------------------------------
 
-    // draw green rectangles into original picture
-    for(auto const& curRct : rcts)
-        cv::rectangle(toMat(img), curRct, cv::Scalar(0, 255, 0), 2);
-
     // do prediction
     json::JSON retVal;
     retVal["predictions"] = json::Array();
-    std::vector<unsigned long> predicted = m_Net(digits);
-    for(size_t i = 0; i < digits.size(); ++i)
-        retVal["predictions"].append(predicted[i]);
+
+    // use softmax layer to access label probability
+    softmax<LeNet::subnet_type> sNet;
+    sNet.subnet() = m_Net.subnet();
+    for(auto const & curDigit : digits) {
+        matrix<float, 1, 10> p = mat(sNet(curDigit));
+        unsigned long highest = index_of_max(p);
+        json::JSON pred;
+        pred["label"] = highest;
+        pred["probability"] = p(highest);
+        retVal["predictions"].append(pred);
+    }
+
+    // draw green rectangles into original picture
+    for(auto const& curRct : rcts)
+        cv::rectangle(toMat(img), curRct, cv::Scalar(0, 255, 0), 2);
     retVal["result_picture"] = to_jpeg(img).toBase64();
     return retVal;
 }
