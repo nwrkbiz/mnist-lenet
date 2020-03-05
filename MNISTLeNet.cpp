@@ -21,7 +21,7 @@ using namespace giri;
 using namespace std;
 using namespace dlib;
 
-MNISTLeNet::MNISTLeNet(const std::filesystem::path& path) : m_DataSetPath(path),  m_Images(path), m_Labels(path), m_TestImages(path), m_TestLabels(path), m_NetworkFile(path) {
+MNISTLeNet::MNISTLeNet(const std::filesystem::path& path) : m_DataSetPath(path),  m_Images(path), m_Labels(path), m_TestImages(path), m_TestLabels(path), m_NetworkFile(path), m_SyncFile(path) {
     m_Images.append("t10k-images-idx3-ubyte");
     m_Labels.append("t10k-labels-idx1-ubyte");
     m_TestImages.append("train-images-idx3-ubyte");
