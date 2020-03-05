@@ -1,11 +1,11 @@
 MNIST LeNet
 ===========
 
-Detect Handwritten Digits using MNIST and a LeNet. Comes with an simple HTML5 PWA which allows taking pictures and displaying the result.
+Detect Handwritten Digits using a LeNet trained with MNIST. This project comes with an simple HTML5 PWA which allows taking pictures and displaying the result.
 
 Commandline Options
 --------------------
-
+(All of them are optional)
 ```
 Allowed options:
   --help                Print help.
@@ -38,13 +38,13 @@ A pre trained network is provided (mnist/mnist_network.dat)
 
 By default the PWA will only work with an valid SSL certificate (security restriction of most browsers).
 
-To use the client without SSL certificate in chrome/chromium enable the "Insecure origins treated as secure" setting for your host (works for android aswell):
+To use the client without SSL certificate in chrome/chromium you need to enable the "Insecure origins treated as secure" setting for your host. To do so following steps need to be performed (this works on android aswell):
 
-* Navigate to chrome://flags/
+* Enter 'chrome://flags/' as url
 * Search for "Insecure origins treated as secure"
 * Mark setting as enabled and enter your host (including protocol and port, i.e. if programm runs on localhost: http://127.0.0.1:8808)
 
-The PWA can then be accessed normally via the browser (default http://127.0.0.1:8808)
+The PWA can then be accessed via the browser (on localhost via http://127.0.0.1:8808)
 
 ### Executables
 
@@ -52,7 +52,7 @@ All provided executables are completely statically linked and thus should be abl
 
 ### Android
 
-Because the executable is completely statically linked, it can be easily executed on rooted android phones. Just download a package matching your CPU architecture and copy it to '/data' using a terminal emulator or adb.
+Because the executable is completely statically linked, it can be executed on rooted android phones. Download a package matching your CPU architecture and copy it to '/data' using a terminal emulator or adb.
 
 ### About
 2020, Daniel Giritzer
