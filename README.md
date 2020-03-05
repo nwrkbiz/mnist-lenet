@@ -42,9 +42,9 @@ To use the client without SSL certificate in chrome/chromium you need to enable 
 
 * Enter 'chrome://flags/' as url
 * Search for "Insecure origins treated as secure"
-* Mark setting as enabled and enter your host (including protocol and port, i.e. if programm runs on localhost: http://127.0.0.1:8808)
+* Mark setting as enabled and enter your host (including protocol and port, i.e. if programm runs on localhost: http://localhost:8808)
 
-The PWA can then be accessed via the browser (on localhost via http://127.0.0.1:8808)
+The PWA can then be accessed via the browser (on localhost via http://localhost:8808)
 
 ### Executables
 
