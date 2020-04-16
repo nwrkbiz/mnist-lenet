@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
         // print help message
         if (vm.count("help")) {
-            cout << desc << "\n";
+            std::cout << desc << std::endl;
             return EXIT_SUCCESS;
         }
 
@@ -98,12 +98,12 @@ int main(int argc, char** argv)
         // exit by command:
         std::string exit;
         while(exit != "exit"){
-            cout << "Enter exit to stop the program: " << std::endl;
-            cin >> exit;
+            std::cout << "Enter exit to stop the program: " << std::endl;
+            std::cin >> exit;
         };
     }
     catch(const ExceptionBase& e){
-        cerr << e.getMessage() << endl;
+        std::cerr << e.getMessage() << std::endl;
     }
     return EXIT_SUCCESS;
 }
