@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         // path to html5 client
         std::filesystem::path clientPath = "client";
         if(vm.count("client"))
-            mnistPath = vm["client"].as<std::string>();
+            clientPath = vm["client"].as<std::string>();
 
         // create network instance, ctor will automatically train a new network if none exists
         MNISTLeNet::SPtr network = std::make_shared<MNISTLeNet>(mnistPath);
