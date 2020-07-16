@@ -27,10 +27,10 @@ void WSSObserver::update(WebSocketSession::SPtr sess){
 
     json::JSON answ;
     try{
-        bool ok;
-        json::JSON msg = json::JSON::Load(sess->getMessage(), ok);
+        std::error_code ec;
+        json::JSON msg = json::JSON::Load(sess->getMessage(), ec);
 
-        if(!ok)
+        if(ec)
             throw WSSObserverException("Invalid request sent! Could not parse JSON.");
         else if(!msg.hasKey("command"))
             throw WSSObserverException("Invalid request sent! JSON is missing the command field.");
