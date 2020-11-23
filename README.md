@@ -46,6 +46,8 @@ To use the client without SSL certificate in chrome/chromium you need to enable 
 
 The PWA can then be accessed via the browser (on localhost via http://localhost:8808)
 
+Demo Video: https://www.youtube.com/watch?v=gOj8sgFellM
+
 ### Executables
 
 All provided executables are completely statically linked and thus should be able to run on any device running Linux/Windows.
