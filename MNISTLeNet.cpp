@@ -174,7 +174,7 @@ Blob MNISTLeNet::to_jpeg(array2d<rgb_pixel>& img, size_t quality, const std::str
 	cinfo.in_color_space = JCS_RGB;
 	jpeg_set_defaults(&cinfo);
 	jpeg_set_quality(&cinfo, quality, TRUE);
-    size_t siz = img.size();
+    long unsigned int siz = img.size();
     unsigned char* buf = (unsigned char*)b.data();
 	jpeg_mem_dest(&cinfo, &buf, &siz);
 	jpeg_start_compress(&cinfo, TRUE);
@@ -204,7 +204,7 @@ Blob MNISTLeNet::to_jpeg(array2d<unsigned char>& img, size_t quality, const std:
 	cinfo.in_color_space = JCS_GRAYSCALE;
 	jpeg_set_defaults(&cinfo);
 	jpeg_set_quality(&cinfo, quality, TRUE);
-    size_t siz = img.size();
+    long unsigned int siz = img.size();
     unsigned char* buf = (unsigned char*)b.data();
 	jpeg_mem_dest(&cinfo, &buf, &siz);
 	jpeg_start_compress(&cinfo, TRUE);

@@ -3,7 +3,7 @@ CPP=main.cpp MNISTLeNet.cpp WSSObserver.cpp
 NAME=mnist_lenet
 PARAMS=-static -O3 -std=c++17 -s -lboost_system -lboost_iostreams -lboost_program_options -lssl -lcrypto -lstdc++fs -lfltk -lfltk_images  -lfreetype -lz -lpthread -latomic -ldlib -lpng -ljpeg -llapack -lblas -lcblas -lgfortran -llapack -lblas -lm
 PARAMS_LINUX=-lopencv_imgproc -lopencv_core -littnotify $(PARAMS) -lXinerama -lXft  -lXrender -lXfixes -lXext -lX11 -lxcb -lXau -lXdmcp -lrt -ldl 
-PARAMS_WINDOWS=-lopencv_imgproc420 -lopencv_core420 $(PARAMS) -DWIN32 -D_WIN32 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mconsole -lole32 -luuid -lcomctl32 -lwsock32 -lws2_32 -lksuser -lwinmm -lcrypt32
+PARAMS_WINDOWS=-lopencv_imgproc450 -lopencv_core450 $(PARAMS) -DWIN32 -D_WIN32 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mconsole -lole32 -luuid -lcomctl32 -lwsock32 -lws2_32 -lksuser -lwinmm -lcrypt32
 
 all: all_musl all_windows
 all_musl: linux_x86_64_musl linux_i686_musl linux_armhf_musl linux_aarch64_musl linux_mips_musl linux_mipsel_musl linux_ppc_musl
